@@ -1,0 +1,57 @@
+.tic-tac-toe{
+  margin: 5px 10px;
+  font: italic 40px/20px serif, Georgia;
+}
+
+a, .btn-success:hover{
+  background-color: #99E2EE;
+  border-color: #C5C4C2;
+  color: #B3B2A9;
+  font: italic 15px Georgia;
+}
+
+a, .btn-success{
+  display: inline-block;
+  list-style-type: none;
+  list-style: none;
+  border: solid 5px #99E2EE;
+  font: italic 15px serif;
+  background-color: #D4D3D1;
+}
+
+/*.btn .span1{
+  color: #CBB079;
+  border: solid 5px silver;
+  background-color: #D4D3D1;
+  font: italic 40px Georgia;
+}
+
+a, .btn:hover{
+  background-color: #03B1F4;
+  border: solid 5px #CBB079;
+  color: #99E2EE;
+}
+
+.something{
+  display: inline-block;
+  margin: 2% 4%;
+  color: #CBB079;
+  border: solid 5px #D4D3D1;
+  font: italic 40px/20px serif, Georgia;
+}
+
+.add-on{
+  font: italic 30px Georgia;
+  display: inline-block;
+  text-align: center;
+  width: 30%;
+  margin: 5% 10%;
+}
+
+.something {
+  text-align: center;
+  text-align: justify;
+  margin: 5% 20%;
+  font: italic 20px serif;
+  width: 60%;
+}*/
