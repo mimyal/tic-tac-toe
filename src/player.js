@@ -1,5 +1,7 @@
 
 var Player = function(){
+  this.possiblePlays = [1,2,3,4,5,6,7,8,9];
+  this.name = "";
   this.plays = [];
   this.score = 0;
   this.turns = 0;
@@ -16,37 +18,15 @@ Player.prototype.xO = function () {
     this.who = "X";}
 };
 
-Player.prototype.status = function () {
-  // if(matchWin === true){
-  //   endGame();
-  // }
-  // if(tie === true){
-  //   newGame();
-  // }
-  // if(nextPlay === true){
-  //     xO();
-  // }
-  };
-
-Player.prototype.matchWin = function(){
-  //add to this for deciding if the game has been won
-  if (this.plays.includes()){
-    return true;
-  }
-};
-
-Player.prototype.newGame = function () {
-    var newGame = true;
-};
 
 //this could be useful for an automated player later
 Player.prototype.shuffle = function(){
-    for (let i = this.plays.length; i; i--){
+    for (let i = this.possiblePlays.length; i; i--){
         let j = Math.floor(Math.random() * i);
-        [this.plays[i - 1], this.plays[j]] = [this.plays[j], this.plays[i - 1]];
+        [this.plays[i - 1], this.possiblePlays[j]] = [this.possiblePlays[j], this.possiblePlays[i - 1]];
     }
-    console.log(this.plays);
-    return this.plays;
+    console.log(this.possiblePlays);
+    return this.possiblePlays;
 };
 
 
