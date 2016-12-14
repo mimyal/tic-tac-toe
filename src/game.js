@@ -3,17 +3,37 @@ import Board from 'board';
 
 var Game = function(){
   this.nextPlay = true;
-  this.name1 = prompt("Please enter your name", "<name goes here>");
+  this.name1 = window.prompt("Please enter your name", "your name here");
   if (customerName!== null){
+    P1 = new Player();
+    P1.name = this.name1;
+    P1.mark = "X";
     document.getElementById("welcome").innerHTML =
-    "Hello " + this.name1 + "! How are you today?";
+    "Hello " + this.name1 + "!";
+    P1.turn = true;
   }
 };
-  this.name2 = prompt("Please enter your name", "<name goes here>");
+  this.name2 = window.prompt("Please enter your name", 'your name here');
   if (customerName!== null){
+    P2 = new Player();
+    P2.name = this.name2;
+    P2.mark = "O";
     document.getElementById("welcome").innerHTML =
-    "Hello " + this.name2 + "! How are you today?";
+    "Hello " + this.name2 + "!";
   }
+
+  Game.prototype.playerAction = function () {
+    if (P1.turn === true){
+      P1.plays();
+      P1.turn = false;
+      P2.turn = true;
+    }
+      else if(P2.turn === true){
+      P2.plays();
+      P2.turn = false;
+      P1.turn = true;
+    }
+  };
 
   Game.prototype.status = function () {
     if(this.match === true){
@@ -23,7 +43,7 @@ var Game = function(){
       newGame();
     }
     if(this.nextPlay === true){
-        xO();
+        playerAction();
     }
   };
 
