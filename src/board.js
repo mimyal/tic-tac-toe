@@ -26,6 +26,7 @@ Board.prototype.remaining = function () {
   if(this.possiblePlays === 0){
     this.possiblePlays = Math.pow(this.spaces.length, 2);
   }
+  return this.possiblePlays;
 };
 
 export default Board;

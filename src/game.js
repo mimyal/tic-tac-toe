@@ -1,26 +1,35 @@
 import Player from 'player';
 import Board from 'board';
 
+var prompt = require('prompt');
+prompt.start();
+
 var Game = function(){
+  var name1 = "";
+  var name2 = "";
   this.nextPlay = true;
-  this.name1 = window.prompt("Please enter your name", "your name here");
-  if (customerName!== null){
+  prompt.get("your name", "your name here");
+  prompt.get(['name1', 'name2'], function (err, result) {
+    console.log('Command-line input received:');
+    console.log('  Player 1 || ' + result.name1);
+    console.log('  Player 2 || ' + result.name2);
+  });
+  if (name1!== null){
     P1 = new Player();
-    P1.name = this.name1;
+    P1.name = name1;
     P1.mark = "X";
     document.getElementById("welcome").innerHTML =
-    "Hello " + this.name1 + "!";
+    "Hello " + name1 + "! You are X's";
     P1.turn = true;
   }
-};
-  this.name2 = window.prompt("Please enter your name", 'your name here');
-  if (customerName!== null){
+  if (name2!== null){
     P2 = new Player();
-    P2.name = this.name2;
+    P2.name = name2;
     P2.mark = "O";
     document.getElementById("welcome").innerHTML =
-    "Hello " + this.name2 + "!";
+    "Hello " + name2 + "! You are O's";
   }
+};
 
   Game.prototype.playerAction = function () {
     if (P1.turn === true){
