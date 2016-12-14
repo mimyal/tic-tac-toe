@@ -1,15 +1,33 @@
 import Board from 'board';
 
+
 describe('TicTacToe', function() {
   var testing = new Board();
-  describe('Board', function() {
+  describe('board', function() {
+    it('the possible plays should represent the length of the board squared', function() {
+      expect(testing.possiblePlays).toEqual(Math.pow(testing.spaces.length, 2));
+    });
+  });
+});
+
+describe('TicTacToe', function() {
+  var testing = new Board();
+  describe('plays', function() {
     it('should keep track of plays', function() {
       expect(testing.plays()).toEqual([]);
     });
   });
 });
 
-
+describe('TicTacToe', function() {
+  var testing = new Board();
+  var testing2 = new Board();
+  describe('plays', function() {
+    it('should be the same for every player', function() {
+      expect(testing.plays()).toEqual(testing2.plays());
+    });
+  });
+});
 
 
 
