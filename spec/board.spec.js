@@ -2,15 +2,49 @@ import Board from 'board';
 
 //This seem to imply that Board is a prototype of TicTacToe? But the 'testing' Board is a new object
 describe('TicTacToe', function() {
-  var testing = new Board();
+  var testBoard = new Board();
   describe('Board', function() {
-    it('should define the structure of the board', function() {
-      expect(testing.events).toContain('something');
-    // it('with or without input, the board stays the same', function(){
-      // expect(testing.Board()).toEqual(9);
+
+    it('should contain a 2D array', function() {
+      expect(testBoard.spaces).toContain([]);
     });
   });
 });
+//
+// var testing = new Board();
+// describe('Board', function() {
+//
+//   it('should keep track of plays', function() {
+//     expect(testing.plays()).toEqual([]);
+//   });
+// });
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // describe('Scrabble', function() {
 //   var shufflesTwo = new Scrabble();
@@ -22,24 +56,3 @@ describe('TicTacToe', function() {
 //   });
 // });
 //
-// describe('Scrabble', function() {
-//     var testScrabble = new Scrabble();
-//   describe('bonus', function(){
-//     it('should give a bonus for any word that is 7 characters', function(){
-//       expect(testScrabble.bonus('twitter')).toEqual();
-//     });
-//   });
-// });
-//
-// describe('Scrabble', function() {
-//     var testScrabble = new Scrabble();
-//
-//   describe('tilesDrawn', function(){
-//     it('should return the array containing tiles drawn', function(){
-//       expect(testScrabble.drawTiles(3)).toContain(Array);
-//     });
-//     it('should take the number of tiles specified in the function call', function(){
-//       expect(testScrabble.drawTiles(3).tilesDrawn.length.toEqual(3));
-//     });
-//   });
-// });
