@@ -14,6 +14,7 @@ var Game = function(){
     console.log('  Player 1 || ' + result.name1);
     console.log('  Player 2 || ' + result.name2);
   });
+  var gameBoard = new Board();
   if (name1!== null){
     P1 = new Player();
     P1.name = name1;
@@ -32,17 +33,29 @@ var Game = function(){
 };
 
   Game.prototype.playerAction = function () {
+    // validInput();
     if (P1.turn === true){
-      P1.plays();
       P1.turn = false;
       P2.turn = true;
+      gameBoard.spaces[result.this.loc1][result.this.loc2] = P1.mark;
     }
       else if(P2.turn === true){
-      P2.plays();
       P2.turn = false;
       P1.turn = true;
+      gameBoard.spaces[result.this.loc1][result.this.loc2] = P2.mark;
     }
   };
+
+  // Game.prototype.validInput = function () {
+  //   prompt.get('this.loc1', 'this.loc2', function (err, result) {
+  //     console.log(':');
+  //     console.log('  First coordinate (0, 1 or 2) || ' + result.this.loc1);
+  //     console.log('  Second coordinate (0, 1, 2) || ' + result.this.loc2);
+  //     if (gameBoard.spaces[result.loc1][result.loc2]!=='_') {
+  //       validInput();
+  //     }
+  //   });
+  // };
 
   Game.prototype.status = function () {
     if(this.match === true){

@@ -1,8 +1,20 @@
 import Player from 'player';
 
 describe('TicTacToe', function() {
+  var testPlayer = new Player();
+  describe('plays', function() {
+    // it('should pick a board tile from spaces that is not not yet played', function() {
+    //   var testBoardSpaces = [[1,2,3],[4,5,6],[7,8,9]];
+    //   // here the player knows what options are available
+    //   // another prompt, how to test that? cant test that
+    //   // return the character from the prompt
+    //   // expect()
+    // });
+    // it('should return the play the player just made', function() {
+    //
+    //   expect(testPlayer.plays()).toEqual('')
+    // });
 
-  describe('Player', function() {
   // it should assign a player1 or a player2 marker (two tests)
   // it should not assign markers to a third player
 

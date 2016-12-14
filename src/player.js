@@ -12,6 +12,11 @@ var Player = function(){
      winStatus = true;
 }}};
 
+// // Will return the play the player made
+// Player.prototype.plays = function(){
+//   // here player will return
+// };
+
 
 //this could be useful for an automated player later
 Player.prototype.shuffle = function(){
