@@ -5,36 +5,41 @@ var prompt = require('prompt');
 prompt.start();
 
 var Game = function(){
-  var name1 = "";
-  var name2 = "";
+  this.board = new Board();
+  // var name1 = "";
+  // var name2 = "";
+  this.tie = false;
+  this.match = false;
   this.nextPlay = true;
-  prompt.get("your name", "your name here");
-  prompt.get(['name1', 'name2'], function (err, result) {
-    console.log('Command-line input received:');
-    console.log('  Player 1 || ' + result.name1);
-    console.log('  Player 2 || ' + result.name2);
-  });
-  var gameBoard = new Board();
-  if (name1!== null){
+
+  // prompt.get("your name", "your name here");
+  // prompt.get(['name1', 'name2'], function (err, result) {
+  //   console.log('Command-line input received:');
+  //   console.log('  Player 1 || ' + result.name1);
+  //   console.log('  Player 2 || ' + result.name2);
+  // });
+  // if (name1!== null){
     P1 = new Player();
-    P1.name = name1;
+    // P1.name = name1;
     P1.mark = "X";
     document.getElementById("welcome").innerHTML =
-    "Hello " + name1 + "! You are X's";
+    "Hello P1!  You are X's";
     P1.turn = true;
-  }
-  if (name2!== null){
+
+  // }if (name2!== null){
     P2 = new Player();
-    P2.name = name2;
+    // P2.name = name2;
     P2.mark = "O";
     document.getElementById("welcome").innerHTML =
-    "Hello " + name2 + "! You are O's";
-  }
+    "Hello P2!  You are O's";
+  };
 };
 
   Game.prototype.playerAction = function () {
     // validInput();
     if (P1.turn === true){
+      //plays function will wait for the player to play, then
+      P1.plays();
       P1.turn = false;
       P2.turn = true;
       gameBoard.spaces[result.this.loc1][result.this.loc2] = P1.mark;
@@ -58,6 +63,7 @@ var Game = function(){
   // };
 
   Game.prototype.status = function () {
+    //toggle status
     if(this.match === true){
       endGame();
     }
@@ -85,6 +91,7 @@ Game.prototype.exit = function () {
 };
 
 Game.prototype.fillName = function () {
+  //show players names on the game page
   document.getElementById('name1').innerHTML = this.name1;
   document.getElementById('name2').innerHTML = this.name2;
 };
