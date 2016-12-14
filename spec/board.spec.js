@@ -1,10 +1,11 @@
 import Board from 'board';
 
+//This seem to imply that Board is a prototype of TicTacToe? But the 'testing' Board is a new object
 describe('TicTacToe', function() {
   var testing = new Board();
   describe('Board', function() {
     it('should define the structure of the board', function() {
-      expect(testing.events).toContain();
+      expect(testing.events).toContain('something');
     // it('with or without input, the board stays the same', function(){
       // expect(testing.Board()).toEqual(9);
     });
