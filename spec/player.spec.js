@@ -1,8 +1,13 @@
 import Player from 'player';
 
 describe('TicTacToe', function() {
-
+  var testPlayer = new Player();
   describe('Player', function() {
+    //it should construct the player with the required variables
+    it('should construct the player with the required variables', function() {
+      // player needs a marker
+      //player needs a status to know if it is their turn or not
+    });
   // it should assign a player1 or a player2 marker (two tests)
   // it should not assign markers to a third player
 
