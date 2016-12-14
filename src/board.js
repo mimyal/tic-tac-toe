@@ -16,7 +16,7 @@ var Board = function(){
 };
 
 Board.prototype.plays = function () {
-  //keeep track of the number of plays in the game/where they have been, in order to disallow double assignment
+  //keeep track of the plays in the game/where they have been, in order to disallow double assignment
   this.plays = [];
   return this.plays;
 };
@@ -26,6 +26,7 @@ Board.prototype.remaining = function () {
   if(this.possiblePlays === 0){
     this.possiblePlays = Math.pow(this.spaces.length, 2);
   }
+  return this.possiblePlays;
 };
 
 export default Board;

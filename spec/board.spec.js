@@ -48,14 +48,15 @@ describe('TicTacToe', function() {
   });
 });
 
-// describe('TicTacToe', function() {
-//   var testing = new Board();
-//   describe('plays', function() {
-//     it('should keep track of plays', function() {
-//       expect(testing.plays()).toEqual([]);
-//     });
-//   });
-// });
+describe('TicTacToe', function() {
+  var testing = new Board();
+  testing.possiblePlays = 0;
+  describe('remaining', function() {
+    it('should refresh the board to its original glory once there are no more moves left', function() {
+      expect(testing.remaining()).toEqual(9);
+    });
+  });
+});
 
 
 

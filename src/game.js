@@ -1,19 +1,61 @@
 import Player from 'player';
 import Board from 'board';
 
+var prompt = require('prompt');
+prompt.start();
+
 var Game = function(){
+  var name1 = "";
+  var name2 = "";
   this.nextPlay = true;
-  this.name1 = prompt("Please enter your name", "<name goes here>");
-  if (customerName!== null){
+  prompt.get("your name", "your name here");
+  prompt.get(['name1', 'name2'], function (err, result) {
+    console.log('Command-line input received:');
+    console.log('  Player 1 || ' + result.name1);
+    console.log('  Player 2 || ' + result.name2);
+  });
+  var gameBoard = new Board();
+  if (name1!== null){
+    P1 = new Player();
+    P1.name = name1;
+    P1.mark = "X";
     document.getElementById("welcome").innerHTML =
-    "Hello " + this.name1 + "! How are you today?";
+    "Hello " + name1 + "! You are X's";
+    P1.turn = true;
+  }
+  if (name2!== null){
+    P2 = new Player();
+    P2.name = name2;
+    P2.mark = "O";
+    document.getElementById("welcome").innerHTML =
+    "Hello " + name2 + "! You are O's";
   }
 };
-  this.name2 = prompt("Please enter your name", "<name goes here>");
-  if (customerName!== null){
-    document.getElementById("welcome").innerHTML =
-    "Hello " + this.name2 + "! How are you today?";
-  }
+
+  Game.prototype.playerAction = function () {
+    // validInput();
+    if (P1.turn === true){
+      P1.turn = false;
+      P2.turn = true;
+      gameBoard.spaces[result.this.loc1][result.this.loc2] = P1.mark;
+    }
+      else if(P2.turn === true){
+      P2.turn = false;
+      P1.turn = true;
+      gameBoard.spaces[result.this.loc1][result.this.loc2] = P2.mark;
+    }
+  };
+
+  // Game.prototype.validInput = function () {
+  //   prompt.get('this.loc1', 'this.loc2', function (err, result) {
+  //     console.log(':');
+  //     console.log('  First coordinate (0, 1 or 2) || ' + result.this.loc1);
+  //     console.log('  Second coordinate (0, 1, 2) || ' + result.this.loc2);
+  //     if (gameBoard.spaces[result.loc1][result.loc2]!=='_') {
+  //       validInput();
+  //     }
+  //   });
+  // };
 
   Game.prototype.status = function () {
     if(this.match === true){
@@ -23,7 +65,7 @@ var Game = function(){
       newGame();
     }
     if(this.nextPlay === true){
-        xO();
+        playerAction();
     }
   };
 
