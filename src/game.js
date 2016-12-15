@@ -33,7 +33,7 @@ var Game = function(){
     document.getElementById("welcome").innerHTML =
     "Hello P2!  You are O's";
   };
-};
+
 
   Game.prototype.playerAction = function () {
     // validInput();
