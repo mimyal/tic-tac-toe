@@ -73,6 +73,37 @@ describe('Game', function() {
   });
 });
 
+describe('Game', function() {
+  var testGame = new Game();
+  describe('validInput', function() {
+    it('should return true if board location is unfilled, otherwise return false', function() {
+      testGame.loc1 = 1;
+      testGame.loc2 = 1;
+      expect(testGame.validInput()).toBeTruthy();
+      testGame.playerAction();
+      expect(testGame.validInput()).toBeFalsy();
+    });
+
+  });
+});
+
+// describe('Game', function() {
+//   var testGame = new Game();
+//   describe('checkStatus', function() {
+//     it('populates the currentHash, if there is none', function() {
+//       expect(testGame.currentHash).toEqual({});
+//       testGame.loc1 = 1;
+//       testGame.loc2 = 2;
+//       testGame.playerAction();
+//
+//       testGame.checkStatus(); // should populate the key '12' with value 'X'
+//       expect(testGame.currentHash).toEqual({});
+//
+//     });
+//
+//   });
+// });
+
 // describe('Game', function() {
 //   var testGame = new Game();
 //   describe('game prototype method', function() {

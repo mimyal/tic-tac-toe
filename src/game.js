@@ -1,8 +1,8 @@
 import Player from 'player';
 import Board from 'board';
 
-var prompt = require('prompt');
-prompt.start();
+// var prompt = require('prompt');
+// prompt.start();
 
 // constructor will start the game
 var Game = function(){
@@ -11,9 +11,8 @@ var Game = function(){
   var name1 = "Player 1";
   var name2 = "Player 2";
 
-  // this.loc1 = 0;
-  // this.loc2 = 0;
   this.nextPlay = true;
+  this.currentHash = {};
 
   if (name1!== null){
     this.P1 = new Player();
@@ -33,50 +32,38 @@ var Game = function(){
   }
 };
 
+Game.prototype.validInput = function () { //other things than a location already used can cause an invalid input, but not covered yet
+  if (this.gameBoard.spaces[this.loc1][this.loc2]!=='_')   { return false;
+    // validInput(); // earlier we were prompting for input here this made sense
+  } else {
+    return true;
+  }
+};
+
   Game.prototype.playerAction = function () {
-    // validInput(); // should return the two coordinates, if valid?
-    if (this.P1.turn === true){
-      this.P1.turn = false;
-      this.P2.turn = true;
-      this.gameBoard.spaces[this.loc1][this.loc2] = this.P1.mark;
+    if (this.validInput()) {
+      if (this.P1.turn === true){
+        this.P1.turn = false;
+        this.P2.turn = true;
+        this.gameBoard.spaces[this.loc1][this.loc2] = this.P1.mark;
 
-    }
-      else if(this.P2.turn === true){
-      this.P2.turn = false;
-      this.P1.turn = true;
-      this.gameBoard.spaces[this.loc1][this.loc2] = this.P2.mark;
+      }
+        else if(this.P2.turn === true){
+        this.P2.turn = false;
+        this.P1.turn = true;
+        this.gameBoard.spaces[this.loc1][this.loc2] = this.P2.mark;
+      }
+      // checkStatus();
+    } else {
+        return console.error('invalid input from player');
     }
   };
 
-  // Game.prototype.validInput = function () {
-  //   prompt.get('this.loc1', 'this.loc2', function (err, result) {
-  //     console.log(':');
-  //     console.log('  First coordinate (0, 1 or 2) || ' + result.this.loc1);
-  //     console.log('  Second coordinate (0, 1, 2) || ' + result.this.loc2);
-  //     if (this.gameBoard.spaces[result.loc1][result.loc2]!=='_') {
-  //       validInput();
-  //     }
-  //   });
-  // };
-
-  Game.prototype.status = function () {
-    //toggle status
-    if(this.match === true){
-      endGame();
-    }
-    if(this.tie === true){
-      newGame();
-    }
-    if(this.nextPlay === true){
-        playerAction();
-    }
-  };
-
-Game.prototype.restart = function(){
+  Game.prototype.restart = function(){
   //refresh the board, clear the plays
   this.gameBoard = new Board();
-  // this.P1 = new Player();
-  // this.P2 = new Player();
+
+  this.currentHash = {};
   this.P1.turn = true;
   this.P2.turn = false;
 
@@ -93,6 +80,45 @@ Game.prototype.endGame = function(){
 
 Game.prototype.exit = function () {
   //refresh the players, refresh board refresh game
+};
+
+// Game.prototype.checkStatus = function () {
+//   if (this.currentHash === {}) {
+//     for (var i = 0; i < this.gameBoard.spaces.length; i++) {
+//       for (var j = 0; j < this.gameBoard.spaces[i].length; j++) {
+//         currentHash[i.toString() + j.toString()] = this.gameBoard.spaces[i][j];
+//       }
+//     }
+//   } else {
+//     // currentHash[this.loc1 + this.loc2] // we don't have a current player
+//   }
+
+  // a winning array 0, 1, 2, might have been played 2, 0, 1 - so we should use a hash
+
+  // switch(this.gameBoard.spaces) {
+  //   case []:
+  //   case []: // two options
+  //       // tie
+  //       //code block
+  //       break;
+  //   case n:
+  //       // winner
+  //       // code block
+  //       break;
+  //   default:
+  //       //continue game
+  // }
+
+  // //toggle status
+  // if(this.match === true){
+  //   endGame();
+  // }
+  // if(this.tie === true){
+  //   newGame();
+  // }
+  // if(this.nextPlay === true){
+  //     playerAction();
+  // }
 };
 
 Game.prototype.fillName = function () {
