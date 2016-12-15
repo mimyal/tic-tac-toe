@@ -11,12 +11,6 @@ var Game = function(){
   var name1 = "Player 1";
   var name2 = "Player 2";
   this.nextPlay = true;
-  // prompt.get("your name", "your name here");
-  // prompt.get(['name1', 'name2'], function (err, result) {
-  //   console.log('Command-line input received:');
-  //   console.log('  Player 1 || ' + result.name1);
-  //   console.log('  Player 2 || ' + result.name2);
-  // });
 
   if (name1!== null){
     this.P1 = new Player();
@@ -42,6 +36,7 @@ var Game = function(){
       this.P1.turn = false;
       this.P2.turn = true;
       this.gameBoard.spaces[this.loc1][this.loc2] = this.P1.mark;
+
     }
       else if(this.P2.turn === true){
       this.P2.turn = false;
@@ -62,6 +57,7 @@ var Game = function(){
   // };
 
   Game.prototype.status = function () {
+    //toggle status
     if(this.match === true){
       endGame();
     }
@@ -96,6 +92,7 @@ Game.prototype.exit = function () {
 };
 
 Game.prototype.fillName = function () {
+  //show players names on the game page
   document.getElementById('name1').innerHTML = this.name1;
   document.getElementById('name2').innerHTML = this.name2;
 };

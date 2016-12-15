@@ -7,6 +7,12 @@ describe('TicTacToe', function() {
     it('the possible plays should represent the length of the board squared', function() {
       expect(testing.possiblePlays).toEqual(Math.pow(testing.spaces.length, 2));
     });
+    it('sets reset to use later', function() {
+      expect(testing.reset).toEqual(9);
+    });
+    it('sets possiblePlays = reset', function() {
+      expect(testing.possiblePlays).toEqual(testing.reset);
+    });
   });
 });
 
@@ -16,24 +22,28 @@ describe('TicTacToe', function() {
 
     it('should set the 2D array correctly', function() {
       expect(
-        testBoard.spaces[0][0]== 1 &&
-        testBoard.spaces[0][1]== 2 &&
-        testBoard.spaces[0][2]== 3
+        testBoard.spaces[0][0]== "_" &&
+        testBoard.spaces[0][1]== "_" &&
+        testBoard.spaces[0][2]== "_"
       ).toBeTruthy();
       expect(
-        testBoard.spaces[1][0]== 4 &&
-        testBoard.spaces[1][1]== 5 &&
-        testBoard.spaces[1][2]== 6
+        testBoard.spaces[1][0]== "_" &&
+        testBoard.spaces[1][1]== "_" &&
+        testBoard.spaces[1][2]== "_"
       ).toBeTruthy();
       expect(
-        testBoard.spaces[2][0]== 7 &&
-        testBoard.spaces[2][1]== 8 &&
-        testBoard.spaces[2][2]== 9
+        testBoard.spaces[2][0]== "_" &&
+        testBoard.spaces[2][1]== "_" &&
+        testBoard.spaces[2][2]== "_"
       ).toBeTruthy();
     });
-    it('should set marker variables X and O', function() {
-      expect(testBoard.markerX).toEqual('X');
-      expect(testBoard.markerO).toEqual('O');
+    it('should not include any marks at initialization', function() {
+      expect((testBoard.spaces[0][1]) !== 'X').toBeTruthy();
+      expect((testBoard.spaces[2][0]) !== 'O').toBeTruthy();
+    });
+    it('should not include any marks at initialization', function() {
+      expect(testBoard.spaces[0][0]).toEqual('_');
+      expect(testBoard.spaces[1][1]).toEqual('_');
     });
   });
 });

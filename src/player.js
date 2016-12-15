@@ -1,22 +1,22 @@
+import Game from 'game';
 
 
 var Player = function(){
-  this.possiblePlays = [1,2,3,4,5,6,7,8,9]; //every play that has happened deducted here
-  this.name = "";
-  this.mark = ""; // x or o
-  this.plays = []; // track plays
+  //every play that has happened deducted here (is this necessary?)
+  // this.name = "";
+  this.mark = "";  // x for p1 or o for p2
+  this.p2plays = []; // track plays
   this.score = 0; // winning?
   this.turns = 0; // how many times have you played
   this.turn = false; //is it your turn or the other players
   if(this.turns > 2){
-     if (this.plays.includes(matchWin)){
+     if (this.plays.includes [[0][0]], [[0][1]], [[0][2]]){
      winStatus = true;
-}}};
-
-// // Will return the play the player made
-// Player.prototype.plays = function(){
-//   // here player will return
-// };
+       if (this.plays.includes [[1][0]]){
+       }
+     }
+   }
+};
 
 
 //this could be useful for an automated player later
