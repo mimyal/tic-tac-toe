@@ -10,7 +10,7 @@ describe('TicTacToe', function() {
       //player needs a status to know if it is their turn or not
     });
 
-  describe('plays', function() {
+  // describe('plays', function() {
     // it('should pick a board tile from spaces that is not not yet played', function() {
     //   var testBoardSpaces = [[1,2,3],[4,5,6],[7,8,9]];
     //   // here the player knows what options are available

@@ -1,4 +1,5 @@
 
+
 var Player = function(){
   this.possiblePlays = [1,2,3,4,5,6,7,8,9]; //every play that has happened deducted here
   this.name = "";
@@ -29,6 +30,8 @@ Player.prototype.shuffle = function(){
 };
 
 
+// var P1 = new Player();
+// var P2 = new Player();
 
 
 
