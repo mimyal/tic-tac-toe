@@ -3,7 +3,6 @@ import Game from 'game';
 describe('TicTacToe', function() {
   var testGame = new Game();
   describe('Game', function() {
-    //    it will instanciate the two players
     it('should have two player objects P1 and P2', function() {
       expect(testGame.P1).toBeDefined();
       expect(testGame.P2).toBeDefined();
@@ -11,7 +10,6 @@ describe('TicTacToe', function() {
       expect(testGame.P1.mark).toEqual('X');
       expect(testGame.P2.mark).toEqual('O');
     });
-    //    it will instanciate the game board
     it('should instanciate a game board object', function() {
       expect(testGame.gameBoard).toBeDefined();
     });
@@ -32,28 +30,48 @@ describe('Game', function() {
       expect(testGame.P2.turn).toEqual(true);
       expect(testGame.P1.turn).toEqual(false);
     });
-    it('should fill the gameBoard.spaces array with Os and Xs', function() {
-      // because of the last 'it test' some of the board is filled in
-      expect(testGame.gameBoard.spaces[0][0]).toEqual('X');
-      expect(testGame.gameBoard.spaces[0][1]).toEqual('0');
-    });
-
   });
 });
-
-// describe('Game', function() {
-//   var testGame = new Game();
-//   describe('restart', function() {
-//     it('should reset the game board', function() {
-//       testGame.loc1 = 0;
-//       testGame.loc2 = 0;
-//       testGame.playerAction();
-//       testGame.restart();
-//       expect(testGame.gameBoard.spaces[0][0])).toEqual('_');
-//
-//     });
-//   });
-// });
+describe('Game', function() {
+  var testGame = new Game();
+  describe('playerAction', function() {
+    it('should put Os and Xs in the correct places on the board', function() {
+      testGame.loc1 = 2;
+      testGame.loc2 = 2;
+      testGame.playerAction();
+      expect(testGame.gameBoard.spaces[2][2]).toEqual('X');
+      testGame.loc1 = 1;
+      testGame.loc2 = 1;
+      testGame.playerAction();
+      expect(testGame.gameBoard.spaces[1][1]).toEqual('O');
+    });
+    it('should swap player turns each action', function() {
+      //this works as we tested it below
+      testGame.restart();
+      testGame.loc1 = 0;
+      testGame.loc2 = 1;
+      testGame.playerAction(); // puts an X on board and:
+      expect(testGame.P1.turn).toBeFalsy();
+      expect(testGame.P2.turn).toBeTruthy();
+    });
+  });
+});
+describe('Game', function() {
+  var testGame = new Game();
+  describe('restart', function() {
+    it('should reset the game board and gives the turn to P1', function() {
+      // <-- Last method worked/tested; We know this works
+      testGame.loc1 = 1;
+      testGame.loc2 = 1;
+      testGame.playerAction();
+      // -->
+      testGame.restart();
+      expect(testGame.gameBoard.spaces[1][1]).toEqual('_');
+      expect(testGame.P1.turn).toBeTruthy();
+      expect(testGame.P2.turn).toBeFalsy();
+    });
+  });
+});
 
 // describe('Game', function() {
 //   var testGame = new Game();

@@ -10,6 +10,9 @@ var Game = function(){
 
   var name1 = "Player 1";
   var name2 = "Player 2";
+
+  // this.loc1 = 0;
+  // this.loc2 = 0;
   this.nextPlay = true;
 
   if (name1!== null){
@@ -72,9 +75,10 @@ var Game = function(){
 Game.prototype.restart = function(){
   //refresh the board, clear the plays
   this.gameBoard = new Board();
-  this.P1 = new Player();
-  this.P2 = new Player();
+  // this.P1 = new Player();
+  // this.P2 = new Player();
   this.P1.turn = true;
+  this.P2.turn = false;
 
   this.P1.mark = "X";
   this.P2.mark = "O";
