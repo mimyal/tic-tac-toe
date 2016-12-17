@@ -119,7 +119,7 @@ Game.prototype.exit = function () {
   // if(this.nextPlay === true){
   //     playerAction();
   // }
-};
+// };
 
 Game.prototype.fillName = function () {
   //show players names on the game page
