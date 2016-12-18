@@ -6,13 +6,13 @@ import Board from 'app/models/board';
 import Player from 'app/models/player';
 
 import PlayerView from 'app/views/player_view';
+import BoardView from 'app/views/board_view';
 
 var GameView = Backbone.View.extend({
   initialize: function(){
 // ====== BOARD ======
     this.board = new Board();
-    this.currentGrid = this.currentBoard.tiles;
-    this.currentBoard = this.board.binaryBoardRepresentation;
+    this.stateOfBoard = this.currentBoard.tiles; // the current state of the board
 
 // ===== PLAYERS =======
     this.playerX = new Player();
@@ -26,238 +26,88 @@ var GameView = Backbone.View.extend({
 
 // ===== INITIALIZATIONS =====
     this.startingPlayer = this.playerX;
+    this.currentPlayer = this.playerX;
     // this.status = 'game'; // other statuses are draw and win, or just 'end'
     // this.turnsLeft = 9;
+
+// ====== START SETTING UP FOR PUTTING THE VIEW TOGETHER =====
+// listElements etc
+
   },
 
   //other things than can cause an invalid input, but not covered here
   validInput: function () {
-    if (this.currentGrid[this.locX][this.locY]!=='_')   {
+    if (this.stateOfBoard[this.locX][this.locY]!=='_')   {
       return false;
     } else {
       return true;
     }
-  },
-// <<<<<<< HEAD
-
-  /* Assuming the board is represented by bits where each square is two bits to allow
-  the representation of 4 states (only 3 are needed).
-  Params: oldBoard = the previous state of the board (represented as a single 18 bit number)
-          this.locX, this.locY = The X and Y locations of the square to be set (between 0 and 2 inclusively)
-          state = The new state to set the square (between 0 and 3 inclusively) 0b11
-  */
-  setBoardSquare: function (state) {
-    if (!validInput()) {
-      return console.log('Not a valid input, hopefully the game can deal with it');
-    }
-    var oldBoard = this.currentBoard;
-    // Calculate the nuber of bits to shift for the this.locX,this.locY position
-    var position = (this.locX + (this.locY * 3)) * 2;
-    this.position = position;
-
-    // Zero out the existing bits in case we are overwriting a pre-existing non-zero state, making an inverted binary mask
-    var newBoard = oldBoard & (~(0b11 << position));
-
-    // Set new state by shifting bits into the correct location and applying an OR
-    newBoard |= state << position; // 0b11 << position
-
-    this.currentBoard = newBoard;
-  },
-
-// =======
-//
-//   /* Assuming the board is represented by bits where each square is two bits to allow
-//   the representation of 4 states (only 3 are needed).
-//   Params: oldBoard = the previous state of the board (represented as a single 18 bit number)
-//           this.locX, this.locY = The X and Y locations of the square to be set (between 0 and 2 inclusively)
-//           state = The new state to set the square (between 0 and 3 inclusively) 0b11
-//   */
-//   setBoardSquare: function (state) {
-//     if (!validInput()) {
-//       return console.log('Not a valid input, hopefully the game can deal with it');
-//     }
-//     var oldBoard = this.currentBoard;
-//     // Calculate the nuber of bits to shift for the this.locX,this.locY position
-//     var position = (this.locX + (this.locY * 3)) * 2;
-//     this.position = position;
-//
-//     // Zero out the existing bits in case we are overwriting a pre-existing non-zero state
-//     var newBoard = oldBoard & (~(0b11 << position));
-//
-//     // Set new state by shifting bits into the correct location and applying an OR
-//     newBoard |= state << position; // 0b11 << position
-//
-//     this.currentBoard = newBoard;
-//   },
-//
-// >>>>>>> crazy-binary-experiment
-
-
-// returns the current square value to use in checkWinner/checkStatus
-  getBoardSquare: function () {
-    // var position = (this.locX + (this.locY * 3)) * 2;
-    // this.position = position;
-    var shiftedState = this.currentBoard & (0b11 << this.position); // non-inverted bit mask, wipes out all but xy (...0000xy0000...)
-    return shiftedState >> this.position; //...00000xy, ie 00, 01, 10
   },
 
   playerAction: function () {
     if (this.validInput()) {
       this.turnsLeft -= 1;
       if (this.playerX.turn === true){
-        this.currentGrid[this.locX][this.locY] = this.playerX.mark;
+        this.stateOfBoard[this.locX][this.locY] = this.playerX.mark;
         checkStatus(); // should end game appropriately if win/draw - otherwise return here
-          this.playerX.turn = false;
-          this.playerO.turn = true;
+        this.playerX.turn = false;
+        this.playerO.turn = true;
+        this.currentPlayer = this.playerO;
       }
         else if(this.playerO.turn === true){
-        this.currentGrid[this.locX][this.locY] = this.playerO.mark;
+        this.stateOfBoard[this.locX][this.locY] = this.playerO.mark;
         checkStatus();
         this.playerO.turn = false;
         this.playerX.turn = true;
+        this.currentPlayer = this.playerX;
       }
     } else {
         return console.error('invalid input from player');
     }
   },
 
-  matchWon: function(state) {
+  matchWon: function() {
     console.log('Checking for a winning board');
-// <<<<<<< HEAD
+    var currentBoard = this.stateOfBoard;
 
+    var position = this.locX + 3*this.locY;
+    var potentialMatchWinners = this.board.winningBoards[position];
+    // for example: [ [[0,0], [0,1], [0,2]], [[0,1], [1,1], [2,1]] ]
 
-
-    // change the binary on the board, the this.currentBoard
-    setBoardSquare(state);
-
-
-
-    // now compare it with the winningBoard collection
-    // for that we need to mask the board in each step, create the inverted binary mask
-    var invertedMaskedCurrentBoard = kjk
-
-
-    for (var i = 0; i < this.board.winnningBoards[this.position].length; i++) {
-      // example current board could be 0b001001100010010001
-      var winnerBoard = this.board.winnningBoard[this.position][i]; // 0b000001000001000001
-
-
-
-      if (winnerBoard == invertedMaskedCurrentBoard) {
+    for (var i = 0; i < potentialMatchWinners.length; i++) {
+      for (var j = 0; j < 3; j++) {
+        var locX = potentialMatchWinners[i][j][0];
+        var locY = potentialMatchWinners[i][j][1];
+        // currentBoard[locX] example ['_', 'X', 'O']
+        if (currentBoard[locX][locY] != this.currentPlayer.mark) {
+          break; // expecting it to break out of the first for loop, but not the second // GOOD TEST TO WRITE
+        }
         return true;
       }
     }
-    return false;
   },
-
-  // checkStatus: function(){
-  //   console.log('WIN? DRAW? CONTINUE?');
-  //   var state = 0;
-  //   if (this.playerX.turn === true) {
-  //     state = 0b01;
-  //     this.currentPlayer = this.playerX;
-  //   } else { // playerO has a turn
-  //     state = 0b10;
-  //     this.currentPlayer = this.playerO;
-  //   }
-
-  //   //check for winner
-  //   if (matchWon(state)) {
-  //     this.winner = this.currentPlayer;
-  //     //   this.status = 'win';
-  //     //   //endWithWinner // fancy popup
-  //   }
-  //
-  //   // if no winner check for draw
-  //   if (this.turnsLeft === 0) {
-  //     this.status = 'draw';
-  //     //endWithDraw // fancy popup
-  //   }
-  //   if (this.status == 'game') {
-  //     return true;
-  //   }
-  // },
-
-  // restartGame: function(){
-  //   //refresh the board, clear the plays, switch starting player
-  //   console.log('New starting player!');
-  //   this.currentBoard = new Board();
-  //   this.currentGrid = this.currentBoard.tiles;
-  //
-  //   if (this.startingPlayer == this.playerX) {
-  //     this.playerX.turn = false;
-  //     this.playerO.turn = true;
-  //     console.log('Player 2!');
-  //   } else {
-  //     this.playerO.turn = false;
-  //     this.playerX.turn = true;
-  //     console.log('Player 1');
-  //   }
-  //   // this.playerX.mark = "X";
-  //   // this.playerO.mark = "O";
-  //   this.status = 'game'; // other statuses are draw and win, or just 'end'
-  //   this.turnsLeft = 9;
-  //
-  // },
-
-  // endWithWinner: function(){
-  //   //add to this for deciding if the game has been won
-  //   if (this.playerX.turn === true) {
-  //     this.playerX.score +=1;
-  //     winningScreen(this.playerX);
-  //   } else if (this.playerO.turn === true) {
-  //     this.playerX.score +=1;
-  //     winningScreen(this.playerO);
-  //     }
-  // },
-
-  // endWithDraw: function(){
-  //   console.log('The game is a tie. Nobody won.');
-  //   stopPropagation();
-  // },
-
-  // winningScreen: function(player) {
-  //   console.log(player + 'WON THE GAME!');
-  //   stopPropagation();
-  // },
-
-// =======
-  //
-  //   // change the binary on the board, the this.currentBoard
-  //   setBoardSquare(state);
-  //
-  //   // now compare it with the winningBoard collection
-  //   for (var i = 0; i < this.board.winnningBoards[this.position].length; i++) {
-  //     var winnerBoard = this.board.winnningBoard[this.position][i];
-  //     if (winnerBoard === this.currentBoard) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // },
 
   checkStatus: function(){
     console.log('WIN? DRAW? CONTINUE?');
-    var state = 0;
-    if (this.playerX.turn === true) {
-      state = 0b01;
-      this.currentPlayer = this.playerX;
-    } else { // playerO has a turn
-      state = 0b10;
-      this.currentPlayer = this.playerO;
+
+    // early on in the game there is no need to loop through anything
+    if (this.turnsLeft >= 7) { // first (9) and second (8) turns no winner is declared
+      return true;
     }
 
     //check for winner
-    if (matchWon(state)) {
+    if (matchWon()) {
+      this.status = 'win';
       this.winner = this.currentPlayer;
-      //   this.status = 'win';
       //   //endWithWinner // fancy popup
+      return false;
     }
 
     // if no winner check for draw
     if (this.turnsLeft === 0) {
       this.status = 'draw';
       //endWithDraw // fancy popup
+      return false;
     }
     if (this.status == 'game') {
       return true;
@@ -268,46 +118,41 @@ var GameView = Backbone.View.extend({
     //refresh the board, clear the plays, switch starting player
     console.log('New starting player!');
     this.currentBoard = new Board();
-    this.currentGrid = this.currentBoard.tiles;
+    this.stateOfBoard = this.currentBoard.tiles;
 
     if (this.startingPlayer == this.playerX) {
       this.playerX.turn = false;
       this.playerO.turn = true;
+      this.startingPlayer = this.playerO;
+      this.currentPlayer = this.playerO;
       console.log('Player 2!');
     } else {
       this.playerO.turn = false;
       this.playerX.turn = true;
+      this.startingPlayer = this.playerX;
+      this.currentPlayer = this.playerX;
       console.log('Player 1');
     }
-    // this.playerX.mark = "X";
-    // this.playerO.mark = "O";
     this.status = 'game'; // other statuses are draw and win, or just 'end'
     this.turnsLeft = 9;
 
   },
 
+  // fancy popup view here
   endWithWinner: function(){
-    //add to this for deciding if the game has been won
-    if (this.playerX.turn === true) {
-      this.playerX.score +=1;
-      winningScreen(this.playerX);
-    } else if (this.playerO.turn === true) {
-      this.playerX.score +=1;
-      winningScreen(this.playerO);
-      }
+    this.currentPlayer.score +=1;
+    winningScreen(this.currentPlayer);
+    console.log(this.currentPlayer + 'WON THE GAME!');
+
+    stopPropagation(); // make sure popup window has a restart game option
   },
 
+  // fancy popup view here
   endWithDraw: function(){
     console.log('The game is a tie. Nobody won.');
-    stopPropagation();
+    stopPropagation(); // make sure popup window has a restart game option
   },
 
-  winningScreen: function(player) {
-    console.log(player + 'WON THE GAME!');
-    stopPropagation();
-  },
-
-// >>>>>>> crazy-binary-experiment
   exitGame: function () {
     //refresh the players, refresh board refresh game
   },
@@ -319,7 +164,7 @@ var GameView = Backbone.View.extend({
   }
 
   //other backbone functions here
-  //render etc
+  //render events etc
 
 });
 
