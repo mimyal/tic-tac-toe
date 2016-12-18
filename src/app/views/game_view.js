@@ -2,21 +2,19 @@ import Backbone from 'backbone';
 import $ from 'jquery';
 import _ from 'underscore';
 
+import Board from 'app/models/board';
+import Player from 'app/models/player';
 
 import PlayerView from 'app/views/player_view';
-import Board from 'app/models/board';
-
-// var prompt = require('prompt');
-// prompt.start();
 
 var GameView = Backbone.View.extend({
   initialize: function(){
+// ====== BOARD ======
     this.board = new Board();
     this.currentGrid = this.currentBoard.tiles;
-    this.currentBoard = 0b0000000000000000000; // 00 is no change, 10 is player 1, 01 is player 2, 11 is invalid
+    this.currentBoard = this.board.binaryBoardRepresentation;
 
-    this.startingPlayer = this.playerX;
-
+// ===== PLAYERS =======
     this.playerX = new Player();
     this.playerX.name = 'Player 1';
     this.playerX.mark = 'X';
@@ -26,45 +24,51 @@ var GameView = Backbone.View.extend({
     this.playerO.name = 'Player 2';
     this.playerO.mark = 'O';
 
-    this.status = 'game'; // other statuses are draw and win, or just 'end'
-    this.turnsLeft = 9;
-    //other initializations or validations on the game initialize?
-  },
-
-  /* Assuming the board is represented by bits where each square is two bits to allow
-  the representation of 4 states (only 3 are needed).
-  Params: oldBoard = the previous state of the board (represented as a single 18 bit number)
-          this.locX, this.locY = The X and Y locations of the square to be set (between 0 and 2 inclusively)
-          state = The new state to set the square (between 0 and 3 inclusively)
-  */
-  setBoardSquare: function (state) {
-    var oldBoard = this.currentBoard;
-    // Calculate the nuber of bits to shift for the x,this.locY position
-    var shift = (this.locX + (this.locY * 3)) * 2;
-
-    // Zero out the existing bits in case we are overwriting a pre-existing non-zero state
-    var newBoard = oldBoard & (~(0b11 << shift));
-
-    // Set new state by shifting bits into the correct location and applying an OR
-    newBoard |= state << shift;
-
-    this.currentBoard = newBoard;
-  },
-
-  getBoardSquare: function () {
-    var shift = (this.locX + (this.locY * 3)) * 2;
-    var shiftedState = this.currentBoard & (0b11 << shift); // non-inverted bit mask, wipes out all but xy (...0000xy0000...)
-    return shiftedState >> shift; //...00000xy, ie 00, 01, 10
+// ===== INITIALIZATIONS =====
+    this.startingPlayer = this.playerX;
+    // this.status = 'game'; // other statuses are draw and win, or just 'end'
+    // this.turnsLeft = 9;
   },
 
   //other things than can cause an invalid input, but not covered here
   validInput: function () {
     if (this.currentGrid[this.locX][this.locY]!=='_')   {
       return false;
-      // validInput(); // earlier we were prompting for input here and this made sense to call the function again
     } else {
       return true;
     }
+  },
+
+  /* Assuming the board is represented by bits where each square is two bits to allow
+  the representation of 4 states (only 3 are needed).
+  Params: oldBoard = the previous state of the board (represented as a single 18 bit number)
+          this.locX, this.locY = The X and Y locations of the square to be set (between 0 and 2 inclusively)
+          state = The new state to set the square (between 0 and 3 inclusively) 0b11
+  */
+  setBoardSquare: function (state) {
+    if (!validInput()) {
+      return console.log('Not a valid input, hopefully the game can deal with it');
+    }
+    var oldBoard = this.currentBoard;
+    // Calculate the nuber of bits to shift for the this.locX,this.locY position
+    var position = (this.locX + (this.locY * 3)) * 2;
+    this.position = position;
+
+    // Zero out the existing bits in case we are overwriting a pre-existing non-zero state
+    var newBoard = oldBoard & (~(0b11 << position));
+
+    // Set new state by shifting bits into the correct location and applying an OR
+    newBoard |= state << position; // 0b11 << position
+
+    this.currentBoard = newBoard;
+  },
+
+// returns the current square value to use in checkWinner/checkStatus
+  getBoardSquare: function () {
+    // var position = (this.locX + (this.locY * 3)) * 2;
+    // this.position = position;
+    var shiftedState = this.currentBoard & (0b11 << this.position); // non-inverted bit mask, wipes out all but xy (...0000xy0000...)
+    return shiftedState >> this.position; //...00000xy, ie 00, 01, 10
   },
 
   playerAction: function () {
@@ -87,16 +91,44 @@ var GameView = Backbone.View.extend({
     }
   },
 
+  matchWon: function(state) {
+    console.log('Checking for a winning board');
+
+    // change the binary on the board, the this.currentBoard
+    setBoardSquare(state);
+
+    // now compare it with the winningBoard collection
+    for (var i = 0; i < this.board.winnningBoards[this.position].length; i++) {
+      var winnerBoard = this.board.winnningBoard[this.position][i];
+      if (winnerBoard === this.currentBoard) {
+        return true;
+      }
+    }
+    return false;
+  },
+
   checkStatus: function(){
     console.log('WIN? DRAW? CONTINUE?');
-    // check for winner first
-    if (gridWinner()) {
-      this.status = 'win';
-      //endWithWinner
+    var state = 0;
+    if (this.playerX.turn === true) {
+      state = 0b01;
+      this.currentPlayer = this.playerX;
+    } else { // playerO has a turn
+      state = 0b10;
+      this.currentPlayer = this.playerO;
     }
+
+    //check for winner
+    if (matchWon(state)) {
+      this.winner = this.currentPlayer;
+      //   this.status = 'win';
+      //   //endWithWinner // fancy popup
+    }
+
+    // if no winner check for draw
     if (this.turnsLeft === 0) {
       this.status = 'draw';
-      //endWithDraw
+      //endWithDraw // fancy popup
     }
     if (this.status == 'game') {
       return true;
@@ -209,5 +241,44 @@ var GameView = Backbone.View.extend({
 //   document.getElementById('name1').innerHTML = this.name1;
 //   document.getElementById('name2').innerHTML = this.name2;
 // };
+
+
+// binaryPosition: function(){
+//   switch ([this.locX, this.locY]) {
+//     case [0,0]:
+//       this.currentPosition = 0;
+//       break;
+//     case [0,1]:
+//       this.currentPosition = 2;
+//       break;
+//     case [0,2]:
+//       this.currentPosition = 4;
+//       break;
+//     case [1,0]:
+//       this.currentPosition = 6;
+//       break;
+//     case [1,1]:
+//       this.currentPosition = 8;
+//       break;
+//     case [1,2]:
+//       this.currentPosition = 10;
+//       break;
+//     case [2,0]:
+//       this.currentPosition = 12;
+//       break;
+//     case [2,1]:
+//       this.currentPosition = 14;
+//       break;
+//     case [2,2]:
+//       this.currentPosition = 16;
+//       break;
+//
+//     default:
+//
+//   }
+// },
+
+
+// ========================
 
 export default GameView;
