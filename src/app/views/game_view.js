@@ -38,6 +38,7 @@ var GameView = Backbone.View.extend({
       return true;
     }
   },
+// <<<<<<< HEAD
 
   /* Assuming the board is represented by bits where each square is two bits to allow
   the representation of 4 states (only 3 are needed).
@@ -62,6 +63,35 @@ var GameView = Backbone.View.extend({
 
     this.currentBoard = newBoard;
   },
+
+// =======
+//
+//   /* Assuming the board is represented by bits where each square is two bits to allow
+//   the representation of 4 states (only 3 are needed).
+//   Params: oldBoard = the previous state of the board (represented as a single 18 bit number)
+//           this.locX, this.locY = The X and Y locations of the square to be set (between 0 and 2 inclusively)
+//           state = The new state to set the square (between 0 and 3 inclusively) 0b11
+//   */
+//   setBoardSquare: function (state) {
+//     if (!validInput()) {
+//       return console.log('Not a valid input, hopefully the game can deal with it');
+//     }
+//     var oldBoard = this.currentBoard;
+//     // Calculate the nuber of bits to shift for the this.locX,this.locY position
+//     var position = (this.locX + (this.locY * 3)) * 2;
+//     this.position = position;
+//
+//     // Zero out the existing bits in case we are overwriting a pre-existing non-zero state
+//     var newBoard = oldBoard & (~(0b11 << position));
+//
+//     // Set new state by shifting bits into the correct location and applying an OR
+//     newBoard |= state << position; // 0b11 << position
+//
+//     this.currentBoard = newBoard;
+//   },
+//
+// >>>>>>> crazy-binary-experiment
+
 
 // returns the current square value to use in checkWinner/checkStatus
   getBoardSquare: function () {
@@ -93,6 +123,9 @@ var GameView = Backbone.View.extend({
 
   matchWon: function(state) {
     console.log('Checking for a winning board');
+// <<<<<<< HEAD
+
+
 
     // change the binary on the board, the this.currentBoard
     setBoardSquare(state);
@@ -116,6 +149,92 @@ var GameView = Backbone.View.extend({
     }
     return false;
   },
+
+  // checkStatus: function(){
+  //   console.log('WIN? DRAW? CONTINUE?');
+  //   var state = 0;
+  //   if (this.playerX.turn === true) {
+  //     state = 0b01;
+  //     this.currentPlayer = this.playerX;
+  //   } else { // playerO has a turn
+  //     state = 0b10;
+  //     this.currentPlayer = this.playerO;
+  //   }
+
+  //   //check for winner
+  //   if (matchWon(state)) {
+  //     this.winner = this.currentPlayer;
+  //     //   this.status = 'win';
+  //     //   //endWithWinner // fancy popup
+  //   }
+  //
+  //   // if no winner check for draw
+  //   if (this.turnsLeft === 0) {
+  //     this.status = 'draw';
+  //     //endWithDraw // fancy popup
+  //   }
+  //   if (this.status == 'game') {
+  //     return true;
+  //   }
+  // },
+
+  // restartGame: function(){
+  //   //refresh the board, clear the plays, switch starting player
+  //   console.log('New starting player!');
+  //   this.currentBoard = new Board();
+  //   this.currentGrid = this.currentBoard.tiles;
+  //
+  //   if (this.startingPlayer == this.playerX) {
+  //     this.playerX.turn = false;
+  //     this.playerO.turn = true;
+  //     console.log('Player 2!');
+  //   } else {
+  //     this.playerO.turn = false;
+  //     this.playerX.turn = true;
+  //     console.log('Player 1');
+  //   }
+  //   // this.playerX.mark = "X";
+  //   // this.playerO.mark = "O";
+  //   this.status = 'game'; // other statuses are draw and win, or just 'end'
+  //   this.turnsLeft = 9;
+  //
+  // },
+
+  // endWithWinner: function(){
+  //   //add to this for deciding if the game has been won
+  //   if (this.playerX.turn === true) {
+  //     this.playerX.score +=1;
+  //     winningScreen(this.playerX);
+  //   } else if (this.playerO.turn === true) {
+  //     this.playerX.score +=1;
+  //     winningScreen(this.playerO);
+  //     }
+  // },
+
+  // endWithDraw: function(){
+  //   console.log('The game is a tie. Nobody won.');
+  //   stopPropagation();
+  // },
+
+  // winningScreen: function(player) {
+  //   console.log(player + 'WON THE GAME!');
+  //   stopPropagation();
+  // },
+
+// =======
+  //
+  //   // change the binary on the board, the this.currentBoard
+  //   setBoardSquare(state);
+  //
+  //   // now compare it with the winningBoard collection
+  //   for (var i = 0; i < this.board.winnningBoards[this.position].length; i++) {
+  //     var winnerBoard = this.board.winnningBoard[this.position][i];
+  //     if (winnerBoard === this.currentBoard) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // },
 
   checkStatus: function(){
     console.log('WIN? DRAW? CONTINUE?');
@@ -188,6 +307,7 @@ var GameView = Backbone.View.extend({
     stopPropagation();
   },
 
+// >>>>>>> crazy-binary-experiment
   exitGame: function () {
     //refresh the players, refresh board refresh game
   },

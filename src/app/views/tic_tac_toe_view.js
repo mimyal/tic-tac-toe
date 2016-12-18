@@ -2,11 +2,13 @@
 import Backbone from 'backbone';
 import GameView from 'app/views/game_view';
 
+import Game from 'app/models/game';
+import Player from 'app/models/player';
+
 const TicTacToeView = Backbone.View.extend({ //parent
   initialize: function() {
 
     //initialize the instance of the Game model here
-
 
     //listElements etc
 
@@ -18,7 +20,7 @@ const TicTacToeView = Backbone.View.extend({ //parent
     //   model: this.contactCollection
     // });
 
-        // GameView will initialize Player and Board
+        // GameView will initialize Board and Player
 
 
         // WHAT ARE YOU LISTENING TO?
