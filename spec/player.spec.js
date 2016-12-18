@@ -1,7 +1,7 @@
-import Player from 'player';
+import Player from 'app/views/player_view';
 
 describe('TicTacToe', function() {
-  var testPlayer = new Player();
+  var testPlayer = new PlayerView();
 
   describe('Player', function() {
     //it should construct the player with the required variables
@@ -11,8 +11,8 @@ describe('TicTacToe', function() {
     });
 
   // describe('plays', function() {
-    // it('should pick a board tile from spaces that is not not yet played', function() {
-    //   var testBoardSpaces = [[1,2,3],[4,5,6],[7,8,9]];
+    // it('should pick a board tile from tiles that is not not yet played', function() {
+    //   var testBoardtiles = [[1,2,3],[4,5,6],[7,8,9]];
     //   // here the player knows what options are available
     //   // another prompt, how to test that? cant test that
     //   // return the character from the prompt

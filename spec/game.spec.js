@@ -1,84 +1,84 @@
-import Game from 'game';
+import GameView from 'app/views/game_view';
 
 describe('TicTacToe', function() {
-  var testGame = new Game();
-  describe('Game', function() {
-    it('should have two player objects P1 and P2', function() {
-      expect(testGame.P1).toBeDefined();
-      expect(testGame.P2).toBeDefined();
+  var testGame = new GameView();
+  describe('GameView', function() {
+    it('should have two player objects playerX and playerO', function() {
+      expect(testGame.playerX).toBeDefined();
+      expect(testGame.playerO).toBeDefined();
 
-      expect(testGame.P1.mark).toEqual('X');
-      expect(testGame.P2.mark).toEqual('O');
+      expect(testGame.playerX.mark).toEqual('X');
+      expect(testGame.playerO.mark).toEqual('O');
     });
     it('should instanciate a game board object', function() {
-      expect(testGame.gameBoard).toBeDefined();
+      expect(testGame.board).toBeDefined();
     });
   });
 });
 
-describe('Game', function() {
-  var testGame = new Game();
+describe('GameView', function() {
+  var testGame = new GameView();
   describe('playerAction', function() {
     it('should swap player turns each action', function() {
-      testGame.loc1 = 0;
-      testGame.loc2 = 0;
-      expect(testGame.P1.turn).toEqual(true);
-      expect(testGame.P2.turn).toEqual(false);
+      testGame.locX = 0;
+      testGame.locY = 0;
+      expect(testGame.playerX.turn).toEqual(true);
+      expect(testGame.playerO.turn).toEqual(false);
       testGame.playerAction();
-      testGame.loc1 = 0;
-      testGame.loc2 = 1;
-      expect(testGame.P2.turn).toEqual(true);
-      expect(testGame.P1.turn).toEqual(false);
+      testGame.locX = 0;
+      testGame.locY = 1;
+      expect(testGame.playerO.turn).toEqual(true);
+      expect(testGame.playerX.turn).toEqual(false);
     });
   });
 });
-describe('Game', function() {
-  var testGame = new Game();
+describe('GameView', function() {
+  var testGame = new GameView();
   describe('playerAction', function() {
     it('should put Os and Xs in the correct places on the board', function() {
-      testGame.loc1 = 2;
-      testGame.loc2 = 2;
+      testGame.locX = 2;
+      testGame.locY = 2;
       testGame.playerAction();
-      expect(testGame.gameBoard.spaces[2][2]).toEqual('X');
-      testGame.loc1 = 1;
-      testGame.loc2 = 1;
+      expect(testGame.board[2][2]).toEqual('X');
+      testGame.locX = 1;
+      testGame.locY = 1;
       testGame.playerAction();
-      expect(testGame.gameBoard.spaces[1][1]).toEqual('O');
+      expect(testGame.board[1][1]).toEqual('O');
     });
     it('should swap player turns each action', function() {
       //this works as we tested it below
       testGame.restart();
-      testGame.loc1 = 0;
-      testGame.loc2 = 1;
+      testGame.locX = 0;
+      testGame.locY = 1;
       testGame.playerAction(); // puts an X on board and:
-      expect(testGame.P1.turn).toBeFalsy();
-      expect(testGame.P2.turn).toBeTruthy();
+      expect(testGame.playerX.turn).toBeFalsy();
+      expect(testGame.playerO.turn).toBeTruthy();
     });
   });
 });
-describe('Game', function() {
-  var testGame = new Game();
+describe('GameView', function() {
+  var testGame = new GameView();
   describe('restart', function() {
-    it('should reset the game board and gives the turn to P1', function() {
+    it('should reset the game board and gives the turn to playerX', function() {
       // <-- Last method worked/tested; We know this works
-      testGame.loc1 = 1;
-      testGame.loc2 = 1;
+      testGame.locX = 1;
+      testGame.locY = 1;
       testGame.playerAction();
       // -->
       testGame.restart();
-      expect(testGame.gameBoard.spaces[1][1]).toEqual('_');
-      expect(testGame.P1.turn).toBeTruthy();
-      expect(testGame.P2.turn).toBeFalsy();
+      expect(testGame.board[1][1]).toEqual('_');
+      expect(testGame.playerX.turn).toBeTruthy();
+      expect(testGame.playerO.turn).toBeFalsy();
     });
   });
 });
 
-describe('Game', function() {
-  var testGame = new Game();
+describe('GameView', function() {
+  var testGame = new GameView();
   describe('validInput', function() {
     it('should return true if board location is unfilled, otherwise return false', function() {
-      testGame.loc1 = 1;
-      testGame.loc2 = 1;
+      testGame.locX = 1;
+      testGame.locY = 1;
       expect(testGame.validInput()).toBeTruthy();
       testGame.playerAction();
       expect(testGame.validInput()).toBeFalsy();
@@ -87,13 +87,13 @@ describe('Game', function() {
   });
 });
 
-// describe('Game', function() {
-//   var testGame = new Game();
+// describe('GameView', function() {
+//   var testGame = new GameView();
 //   describe('checkStatus', function() {
 //     it('populates the currentHash, if there is none', function() {
 //       expect(testGame.currentHash).toEqual({});
-//       testGame.loc1 = 1;
-//       testGame.loc2 = 2;
+//       testGame.locX = 1;
+//       testGame.locY = 2;
 //       testGame.playerAction();
 //
 //       testGame.checkStatus(); // should populate the key '12' with value 'X'
@@ -104,8 +104,8 @@ describe('Game', function() {
 //   });
 // });
 
-// describe('Game', function() {
-//   var testGame = new Game();
+// describe('GameView', function() {
+//   var testGame = new GameView();
 //   describe('game prototype method', function() {
 //     it('should...', function() {
 //
@@ -114,8 +114,8 @@ describe('Game', function() {
 //   });
 // });
 
-// describe('Game', function() {
-//   var testGame = new Game();
+// describe('GameView', function() {
+//   var testGame = new GameView();
 //   describe('status', function() {
 //     it('should continue the game as long as the game is not a tie', function() {
 //       //

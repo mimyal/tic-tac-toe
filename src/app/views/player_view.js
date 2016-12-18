@@ -1,11 +1,16 @@
-import Game from 'game';
+import Backbone from 'backbone';
+import $ from 'jquery';
+import _ from 'underscore';
 
 
-var Player = function(){
+import GameView from 'app/views/game_view';
+
+
+var PlayerView = function(){
   //every play that has happened deducted here (is this necessary?)
   // this.name = "";
-  this.mark = "";  // x for p1 or o for p2
-  this.p2plays = []; // track plays
+  this.mark = "";  // x for playerX or o for playerO
+  this.playerOplays = []; // track plays
   this.score = 0; // winning?
   this.turns = 0; // how many times have you played
   this.turn = false; //is it your turn or the other players
@@ -17,21 +22,21 @@ var Player = function(){
      }
    }
 };
+//
+//
+// //this could be useful for an automated player later
+// Player.prototype.shuffle = function(){
+//     for (let i = this.possiblePlays.length; i; i--){
+//         let j = Math.floor(Math.random() * i);
+//         [this.plays[i - 1], this.possiblePlays[j]] = [this.possiblePlays[j], this.possiblePlays[i - 1]];
+//     }
+//     console.log(this.possiblePlays);
+//     return this.possiblePlays;
+// };
 
 
-//this could be useful for an automated player later
-Player.prototype.shuffle = function(){
-    for (let i = this.possiblePlays.length; i; i--){
-        let j = Math.floor(Math.random() * i);
-        [this.plays[i - 1], this.possiblePlays[j]] = [this.possiblePlays[j], this.possiblePlays[i - 1]];
-    }
-    console.log(this.possiblePlays);
-    return this.possiblePlays;
-};
-
-
-// var P1 = new Player();
-// var P2 = new Player();
+// var playerX = new Player();
+// var playerO = new Player();
 
 
 
@@ -45,4 +50,4 @@ Player.prototype.shuffle = function(){
 
 
 //////////////////////
-export default Player;
+export default PlayerView;

@@ -1,8 +1,13 @@
 import Backbone from 'backbone';
 
 const Player = Backbone.Model.extend({
-  // This model should have the attributes for
-  // a single contact: name, phone number, and email.
+  defaults: {
+    name: 'Player',
+    turn: false
+  },
+  initialize: function(){
+    console.log('Created a player with name ' + this.get('name'));
+  }
 
 });
 
