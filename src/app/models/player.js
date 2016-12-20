@@ -2,8 +2,8 @@ import Backbone from 'backbone';
 
 const Player = Backbone.Model.extend({
   defaults: {
-    name: 'Player',
     // score: 0,
+    name: 'Player',
     turn: false
   },
   initialize: function(){
