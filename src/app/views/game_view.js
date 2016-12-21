@@ -10,15 +10,20 @@ import BoardView from 'app/views/board_view';
 
 // instanciated by ttt_view
 var GameView = Backbone.View.extend({
-  initialize: function(){
+  initialize: function(options){
+    this.model = options.model;
+
     this.template = _.template($('#tmpl-game').html());
 
   },
   render: function() {
-    // // console.log('Rendering ContactView');
-    //     var game = {name: this.model.attributes.name};
-    //     var html = this.template(cardName); //instance of Contact
-    //     this.$el.html(html);
+    console.log('Rendering GameView');
+    console.log(this.model.attributes); //'browsable' object
+    console.log(this.model.playerO); //'browsable' object
+    // var status = this.model.attributes.status;
+    // var html2 = '<h1>' + 'GAME STATUS ' + this.model.attributes.status + '</h1>';
+    var html = this.template(this.model);
+    this.$el.html(html);
     //
     //     // Re-attach DOM event listeners to our brand-spankin-new HTML
     //     this.delegateEvents();

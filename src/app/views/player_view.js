@@ -10,15 +10,24 @@ var PlayerView = Backbone.View.extend({
     this.playerX = options.playerX;
     this.playerO = options.playerO;
 
+    // this.players = {
+    //   this.playerX: options.playerX,
+    //   this.player0: options.playerO
+    // }; //errors
+
     // this.playerPlays = []; // tracks plays
     // this.score = 0;
     this.template = _.template($('#tmpl-players').html());
-
   },
   render: function(){
     console.log('Rendering PlayerView');
-    var players = {playerX: this.model.attributes.playerX, playerO: this.model.attributes.playerO};
-    var html = this.template(players); //instance of Contact
+    // console.log(this.playerO.mark);
+    // console.log(this.playerX);
+    // NOTE HOW these two players have names called from different places
+    // this.playerX.name='Player 1' and this.playerO.attributes.name='Player'
+    this.players = {playerX: this.playerX, playerO: this.playerO};
+    console.log(this.players.playerO + '>>>>');
+    var html = this.template({playerX: this.playerX, playerO: this.playerO});
     this.$el.html(html);
 
     // Re-attach DOM event listeners to our brand-spankin-new HTML
@@ -26,7 +35,7 @@ var PlayerView = Backbone.View.extend({
 
     return this;
   }
-  //render and events functions - other logic?
+  //events functions - other logic?
 
 
 

@@ -10,7 +10,7 @@ var Board = Backbone.Model.extend({
 
   },
   initialize: function() { // it can do more complex things we wont see today/this week
-    // console.log("Created new contact with name " + this.get('name'));
+    console.log('Created a new board');
     var winningBoards = {
       0: [
         [[0,0], [0,1], [0,2]], // top row
