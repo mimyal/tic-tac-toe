@@ -31,7 +31,7 @@
         </div>
       </div>
 
-      <ul class="row" id="board">
+      <ol class="row" id="board">
         <!-- <li id="one" class="btn span1" >+</li>
         <li id="two" class="btn span1">+</li>
         <li id="three" class="btn span1">+</li>
@@ -41,7 +41,7 @@
         <li id="seven" class="btn span1">+</li>
         <li id="eight" class="btn span1">+</li>
         <li id="nine" class="btn span1">+</li> -->
-      </ul>
+      </ol>
       <div class="clr">&nbsp;</div>
       <div class="row"><a href="#" id="reset" class="btn-success btn span3">Restart</a></div>
     </div>
@@ -51,29 +51,30 @@
 
     <!-- Underscore Templates - don't forget to add classes in the View before render -->
     <script type="text/template" id="tmpl-board">
-      <li class="board-tiles">
-        <h3><%- value %></h3>
+      <li class="board-tiles button">
+        <h3><%- window.sign %></h3>
       </li>
     </script>
 
     <script type="text/template" id="tmpl-game">
       <!-- <li class="game"> -->
         <h3>Welcome to the Game!</h3>
+        <div class="board-btn button">Click me</div>
       <!-- </li> -->
-      <div class="input-prepend input-append">
-        <span class="add-on win_text">
-          <%- 'Player' + this.model.playerO.mark  + ' has a score of: '%>
-        </span><strong id="o_win" class="win_times add-on">
-          <%- this.model.playerO.attributes.score %>
-        </strong><span class="add-on"></span>
-      </div>
-      <div class="input-prepend input-append">
-        <span class="add-on win_text">
-          <%- 'Player' + this.model.playerX.mark  + ' has a score of: '%>
-        </span><strong id="x_win" class="win_times add-on">
-          <%- this.model.playerO.attributes.score %>
-        </strong><span class="add-on"></span>
-      </div>
+        <div class="input-prepend input-append">
+          <span class="add-on win_text">
+            <%- 'Player' + this.model.playerO.mark  + ' has a score of: '%>
+          </span><strong id="o_win" class="win_times add-on">
+            <%- this.model.playerO.attributes.score %>
+          </strong><span class="add-on"></span>
+        </div>
+        <div class="input-prepend input-append">
+          <span class="add-on win_text">
+            <%- 'Player' + this.model.playerX.mark  + ' has a score of: '%>
+          </span><strong id="x_win" class="win_times add-on">
+            <%- this.model.playerO.attributes.score %>
+          </strong><span class="add-on"></span>
+        </div>
     </script>
 
     <script type="text/template" id="tmpl-players">

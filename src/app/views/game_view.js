@@ -15,6 +15,15 @@ var GameView = Backbone.View.extend({
 
     this.template = _.template($('#tmpl-game').html());
 
+    $('#board').hide();
+
+    var stateOfBoard2D = this.model.board.attributes.tiles;
+
+    this.stateOfBoard = stateOfBoard2D.reduce(function(a, b) { // finally making it a 1d array again
+      return a.concat(b);
+    }, []);
+    // console.log(this.stateOfBoard);
+
   },
   render: function() {
     console.log('Rendering GameView');
@@ -31,7 +40,37 @@ var GameView = Backbone.View.extend({
     //     return this;
   },
   //other backbone functions here:
-  //events etc
+  //events etc to show board
+  events: {
+    'click .board-btn': 'showBoard'
+  },
+
+  showBoard: function(contact) {
+  $('#board').empty();
+  var template = _.template($('#tmpl-board').html());
+  // this.$el.append(contact.$el);
+  var board_details = [];
+  window.sign = '';
+  this.stateOfBoard.forEach(function(value){
+    if (value==1) {
+      window.sign = 'HERE IS MY SIGN'; // will be blank later
+    } else if (value ==3) {
+      window.sign = 'X';
+    } else if (value==5) {
+      window.sign = 'O';
+    }
+    board_details = "<li>" + window.sign + '</li>';
+    var html = template(board_details);
+    console.log(html);
+
+    $('#board').append(html);
+  });
+
+  console.log('show the board');
+  $('#board').show();
+},
+
+
 
   fillName: function () {
     //show players names on the game page
