@@ -31,6 +31,7 @@ const Game = Backbone.Model.extend({
   },
   //other things than can cause an invalid input, but not covered here
   validInput: function () {
+    console.log('ValidInput');
     console.log(this.board.attributes.tiles);
     if (this.board.attributes.tiles[this.board.attributes.locX][this.board.attributes.locY]!=='_')   {
       return false;
@@ -47,11 +48,12 @@ const Game = Backbone.Model.extend({
     }
     console.log('checking status');
     //check for winner
-    if (this.matchWon()) {
-      this.status = 'win';
+    this.matchWon();
+    if (this.status == 'win') {
       this.winner = this.currentPlayer;
       //   //endWithWinner // fancy popup
-      return false;
+      console.log(this.winner.name + ': Match Won!');
+      return false; // as in dont continue playing
     }
 
     // if no winner check for draw
@@ -61,6 +63,7 @@ const Game = Backbone.Model.extend({
       return false;
     }
     if (this.status == 'game') {
+      console.log('Continue the game');
       return true;
     }
   },
@@ -68,21 +71,24 @@ const Game = Backbone.Model.extend({
   restartGame: function(){
     //refresh the board, clear the plays, switch starting player
     console.log('New starting player!');
-    this.board.destroy();
+    this.board.destroy(); // does not change the DOM
     // debugger
-    console.log(this.board.get('tiles'));
-    this.board = new Board({ //hardwire fix for the weirdness that's happening to tiles otherwise
+    this.board = new Board( { //hardwire fix for the weirdness that's happening to tiles otherwise
       tiles: [
       ['_','_','_'],
       ['_','_','_'],
       ['_','_','_']
-    ]
+      ]
     });
-    console.log('what is this board' + JSON.stringify(this.board));
+    this.turnsLeft = 9;
+    this.status = 'game'
+    this.winner = null;
+    console.log('Now this' + this.board.get('tiles'));
+    // console.log('what is this board' + JSON.stringify(this.board));
     this.stateOfBoard = this.board.attributes.tiles;
     console.log('Lets look at those tiles');
     console.log(this.board.get('tiles'));
-    console.log(this);
+    // console.log(this);
 
     if (this.startingPlayer == this.playerX) {
       this.playerX.turn = false;
@@ -103,57 +109,83 @@ const Game = Backbone.Model.extend({
   },
 
   playerAction: function () {
+    this.status = 'game';
+    console.log('PlayerAction!');
     if (this.validInput()) {
       this.turnsLeft -= 1;
+      var currentTiles = this.board.get('tiles');
       if (this.playerX.turn === true){
-        var currentTiles = this.board.get('tiles');
-        console.log('DFJDKFJDSKFJSDKFJD', currentTiles);
-        currentTiles[this.board.attributes.locX][this.board.attributes.locY] = this.playerX.mark;
-        this.board.set({tiles: currentTiles});
+          currentTiles[this.board.attributes.locX][this.board.attributes.locY] = this.playerX.mark;
+          this.board.set({tiles: currentTiles});
 
-        // this.board.attributes.tiles[this.board.attributes.locX][this.board.attributes.locY] = (this.playerX.mark);
-        // this.checkStatus(); // should end game appropriately if win/draw - otherwise return here
-        // this.playerX.turn = false;
-        // this.playerO.turn = true;
-        // this.currentPlayer = this.playerO;
-      }
-      else if(this.playerO.turn === true){
-        this.board.attributes.tiles[this.board.attributes.locX][this.board.attributes.locY] = this.playerO.mark;
-        this.checkStatus();
-        this.playerO.turn = false;
-        this.playerX.turn = true;
-        this.currentPlayer = this.playerX;
+          // this.board.attributes.tiles[this.board.attributes.locX][this.board.attributes.locY] = (this.playerX.mark);
+          this.checkStatus(); // should end game appropriately if win/draw - otherwise return here
+          this.playerX.turn = false;
+          this.playerO.turn = true;
+          this.currentPlayer = this.playerO;
+      } else if(this.playerO.turn === true){
+          // console.log('playerO turn');
+          currentTiles[this.board.attributes.locX][this.board.attributes.locY] = this.playerO.mark;
+          this.board.set({tiles: currentTiles});
+
+          // this.board.attributes.tiles[this.board.attributes.locX][this.board.attributes.locY] = this.playerO.mark;
+          this.checkStatus();
+          this.playerO.turn = false;
+          this.playerX.turn = true;
+          this.currentPlayer = this.playerX;
       }
     } else {
       return console.error('Invalid input from player'); // pops up second time board is run
     }
+    this.trigger('player-action');
   },
 
   matchWon: function() {
     console.log('EVERYONE is a WINNER!');
-
-    // var winStatus;
-    // // console.log('Checking for a winning board');
-    // var currentBoard = this.stateOfBoard;
-    //
-    // var position = this.board.attributes.locX + 3*this.board.attributes.locY;
+    var winCheck;
+    console.log('Checking for a winning board');
     // console.log(this.board);
-    // var potentialMatchWinners = this.board.attributes.winningBoards[position];
-    // // for example: [ [[0,0], [0,1], [0,2]], [[0,1], [1,1], [2,1]] ]
-    //
-    // for (var i = 0; i < potentialMatchWinners.length; i++) {
-    //   winStatus = true;
-    //   for (var j = 0; j < 3; j++) {
-    //     var winningSequence = potentialMatchWinners[i];
-    //     var locX = winningSequence[j][0];
-    //     var locY = winningSequence[j][1];
-    //     // currentBoard[locX] example ['_', 'X', 'O']
-    //     if (currentBoard[locX][locY] != this.currentPlayer.mark) {
-    //       winStatus = false;
-    //     }
-    //   }
-    // } // first for-loop
-    // return winStatus;
+    // this.currentBoard = this.stateOfBoard; // this.board.attributes.tiles
+
+    // calculate to know where in the winning hash to look for the winner
+    var position = this.board.attributes.locX + 3*this.board.attributes.locY;
+    var potentialMatchWinners = this.board.attributes.winningBoards[position];
+    // for example: { 0: [ [[0,0], [0,1], [0,2]], [[0,1], [1,1], [2,1]] ] }
+
+    potentialMatchWinners.forEach(function(winningLine) {
+      winCheck = 0;
+      // debugger // this was undefined because the end } , this) was not specified
+      // winningLine.forEach(function(tile) {
+      //   var winX = tile[0];
+      //   var winY = tile[1];
+      //   var test = this.currentPlayer.mark;
+      //   var test2 = this.stateOfBoard[winX][winY];
+      //     if (this.stateOfBoard[winX][winY] == this.currentPlayer.mark) {
+      //       winCheck += 1;
+      //       console.log(winCheck);
+      //       debugger
+      //       console.log('winning once / twice / third times a winner');
+      //     } //endif
+      // }, this); // end inner each
+      for (var i = 0; i < 3; i++) {
+        var winX = winningLine[i][0];
+        var winY = winningLine[i][1];
+        var test = this.currentPlayer.mark;
+        var test2 = this.stateOfBoard[winX][winY];
+        if (this.stateOfBoard[winX][winY] == this.currentPlayer.mark) {
+          winCheck += 1;
+          console.log(winCheck);
+          // debugger
+          console.log('winning once / twice / third times a winner');
+        } //endif
+      }
+      if (winCheck==3) {
+        this.status = 'win';
+        return true;
+      }
+
+    }, this); //end outer each
+    return false;
   }
 
   //// SPACE FOR OTHER FUNCTIONS

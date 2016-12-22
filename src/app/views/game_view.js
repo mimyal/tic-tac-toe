@@ -27,19 +27,25 @@ var GameView = Backbone.View.extend({
     // this.listenTo(this.model.board, 'board-tiles', this.assessMove);
     this.listenTo(this.model.board, 'destroy', this.canyouhearme);
 
+    this.listenTo(this.model, 'player-action', this.render);
+
+
+
   },
   canyouhearme: function() {
-    console.log('hey hey');
+    console.log('board destroyed');
   },
 
   render: function() {
     console.log('Rendering GameView');
-    console.log(this.model.attributes); //'browsable' object
-    console.log(this.model.playerO); //'browsable' object
+    // console.log(this.model.attributes); //'browsable' object
+    // console.log(this.model.playerO); //'browsable' object
     // var status = this.model.attributes.status;
     // var html2 = '<h1>' + 'GAME STATUS ' + this.model.attributes.status + '</h1>';
     var html = this.template(this.model);
     this.$el.html(html);
+    // debugger
+    // console.log('WHERE IS BOARD?' + this.model.board.tiles);
     //
     //     // Re-attach DOM event listeners to our brand-spankin-new HTML
     //     this.delegateEvents();
@@ -64,11 +70,24 @@ var GameView = Backbone.View.extend({
   },
 
   assessMove: function(){
-    console.log('GO THROUGH THE LAST MOVE FOR ' + this.model.board.attributes.locX + ' ' + this.model.board.attributes.locY + ' TO CHECK NEW STATUS');
+    console.log(this.model.currentPlayer.name + ' TAKES  MOVE: ' + this.model.board.attributes.locX + ' ' + this.model.board.attributes.locY);
     this.model.playerAction({locX: this.model.board.attributes.locX, locY: this.model.board.attributes.locY});
-
+    // put the mark on the board
+    if (this.model.status == 'game') {
+      //carry on
+    } else if (this.model.status == 'draw') {
+      // fancy draw popup
+      window.alert("This game is a draw");
+      this.resetGame();
+    } else if (this.model.status == 'win') {
+      window.alert("This game is won by " + this.model.winner.name);
+      this.model.winner.set({score: (this.model.winner.score+=1)});
+      this.resetGame();
+    } else {
+      console.log.error('What is the status of this game?');
+    }
+    this.showBoard();
   },
-
 
   assessMove0: function(){
     this.model.board.set({locX: 0}); this.model.board.set({locY: 0});this.assessMove();
@@ -121,13 +140,10 @@ var GameView = Backbone.View.extend({
   var counter=0;
   var sign = '';
   this.stateOfBoard.forEach(function(value){
-    // if (value==1) {
     if (value=='_') {
       sign = 'HERE IS MY SIGN'; // will be blank later
-    // } else if (value ==7) {
     } else if (value =='X') {
       sign = 'X';
-    // } else if (value==5) {
     } else if (value=='O') {
       sign = 'O';
     }
@@ -141,6 +157,7 @@ var GameView = Backbone.View.extend({
 
   console.log('show the board');
   $('#board').show();
+
 },
 
 

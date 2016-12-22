@@ -26,7 +26,7 @@ var PlayerView = Backbone.View.extend({
     // NOTE HOW these two players have names called from different places
     // this.playerX.name='Player 1' and this.playerO.attributes.name='Player'
     this.players = {playerX: this.playerX, playerO: this.playerO};
-    console.log(this.players.playerO + '>>>>');
+    // console.log(this.players.playerO + '>>>>');
     var html = this.template({playerX: this.playerX, playerO: this.playerO});
     this.$el.html(html);
 
