@@ -3,15 +3,15 @@ import Backbone from 'backbone';
 var Board = Backbone.Model.extend({
   defaults: { // backbone keyword, similar to schema in rails, does not need to keep all keys, we can add as we need more
     tiles: [
-      [1, 1, 1],
-      [1, 1, 1],
-      [1, 1, 1] // use % to calculate winner instead, replace X with 3 and O with 5
-    ]
+    //   // [1, 1, 1],
+    //   // [1, 1, 1],
+    //   // [1, 1, 1] // use % to calculate winner instead, replace X with 7 and O with 5
+      ['_','_','_'],
+      ['_','_','_'],
+      ['_','_','_']
+    ],
 
-  },
-  initialize: function() { // it can do more complex things we wont see today/this week
-    console.log('Created a new board');
-    var winningBoards = {
+    winningBoards: {
       0: [
         [[0,0], [0,1], [0,2]], // top row
         [[0,0], [1,1], [2,2]], // diagonal1
@@ -55,9 +55,23 @@ var Board = Backbone.Model.extend({
         [[0,0], [1,1], [2,2]], // diagonal1
       ]
 
-    }; //end of winningBoards
-  }
+    } //end of winningBoards
 
+
+  },
+  initialize: function() { // it can do more complex things we wont see today/this week
+    console.log('Created a new board');
+    var locX;
+    var locY;
+    this.tiles = [
+    //   // [1, 1, 1],
+    //   // [1, 1, 1],
+    //   // [1, 1, 1] // use % to calculate winner instead, replace X with 7 and O with 5
+      ['_','_','_'],
+      ['_','_','_'],
+      ['_','_','_']
+    ];
+  }
 });
 
 export default Board;

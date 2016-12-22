@@ -11,7 +11,7 @@ const Game = Backbone.Model.extend({
   initialize: function(){
     // ====== BOARD ======
     this.board = new Board();
-    this.stateOfBoard = this.board.tiles; // the current state of the board
+    this.stateOfBoard = this.board.attributes.tiles; // the current state of the board
 
     // ===== PLAYERS =======
     this.playerX = new Player();
@@ -31,7 +31,8 @@ const Game = Backbone.Model.extend({
   },
   //other things than can cause an invalid input, but not covered here
   validInput: function () {
-    if (this.stateOfBoard[this.locX][this.locY]!=='_')   {
+    console.log(this.board.attributes.tiles);
+    if (this.board.attributes.tiles[this.board.attributes.locX][this.board.attributes.locY]!=='_')   {
       return false;
     } else {
       return true;
@@ -44,7 +45,7 @@ const Game = Backbone.Model.extend({
     if (this.turnsLeft >= 7) { // first (9) and second (8) turns no winner is declared
       return true;
     }
-
+    console.log('checking status');
     //check for winner
     if (this.matchWon()) {
       this.status = 'win';
@@ -67,8 +68,21 @@ const Game = Backbone.Model.extend({
   restartGame: function(){
     //refresh the board, clear the plays, switch starting player
     console.log('New starting player!');
-    this.board = new Board();
-    this.stateOfBoard = this.board.tiles;
+    this.board.destroy();
+    // debugger
+    console.log(this.board.get('tiles'));
+    this.board = new Board({ //hardwire fix for the weirdness that's happening to tiles otherwise
+      tiles: [
+      ['_','_','_'],
+      ['_','_','_'],
+      ['_','_','_']
+    ]
+    });
+    console.log('what is this board' + JSON.stringify(this.board));
+    this.stateOfBoard = this.board.attributes.tiles;
+    console.log('Lets look at those tiles');
+    console.log(this.board.get('tiles'));
+    console.log(this);
 
     if (this.startingPlayer == this.playerX) {
       this.playerX.turn = false;
@@ -92,46 +106,54 @@ const Game = Backbone.Model.extend({
     if (this.validInput()) {
       this.turnsLeft -= 1;
       if (this.playerX.turn === true){
-        this.stateOfBoard[this.locX][this.locY] = this.playerX.mark;
-        this.checkStatus(); // should end game appropriately if win/draw - otherwise return here
-        this.playerX.turn = false;
-        this.playerO.turn = true;
-        this.currentPlayer = this.playerO;
+        var currentTiles = this.board.get('tiles');
+        console.log('DFJDKFJDSKFJSDKFJD', currentTiles);
+        currentTiles[this.board.attributes.locX][this.board.attributes.locY] = this.playerX.mark;
+        this.board.set({tiles: currentTiles});
+
+        // this.board.attributes.tiles[this.board.attributes.locX][this.board.attributes.locY] = (this.playerX.mark);
+        // this.checkStatus(); // should end game appropriately if win/draw - otherwise return here
+        // this.playerX.turn = false;
+        // this.playerO.turn = true;
+        // this.currentPlayer = this.playerO;
       }
       else if(this.playerO.turn === true){
-        this.stateOfBoard[this.locX][this.locY] = this.playerO.mark;
+        this.board.attributes.tiles[this.board.attributes.locX][this.board.attributes.locY] = this.playerO.mark;
         this.checkStatus();
         this.playerO.turn = false;
         this.playerX.turn = true;
         this.currentPlayer = this.playerX;
       }
     } else {
-      return console.error('invalid input from player');
+      return console.error('Invalid input from player'); // pops up second time board is run
     }
   },
 
   matchWon: function() {
-    var winStatus;
-    // console.log('Checking for a winning board');
-    var currentBoard = this.stateOfBoard;
+    console.log('EVERYONE is a WINNER!');
 
-    var position = this.locX + 3*this.locY;
-    var potentialMatchWinners = this.board.winningBoards[position];
-    // for example: [ [[0,0], [0,1], [0,2]], [[0,1], [1,1], [2,1]] ]
-
-    for (var i = 0; i < potentialMatchWinners.length; i++) {
-      winStatus = true;
-      for (var j = 0; j < 3; j++) {
-        var winningSequence = potentialMatchWinners[i];
-        var locX = winningSequence[j][0];
-        var locY = winningSequence[j][1];
-        // currentBoard[locX] example ['_', 'X', 'O']
-        if (currentBoard[locX][locY] != this.currentPlayer.mark) {
-          winStatus = false;
-        }
-      }
-    } // first for-loop
-    return winStatus;
+    // var winStatus;
+    // // console.log('Checking for a winning board');
+    // var currentBoard = this.stateOfBoard;
+    //
+    // var position = this.board.attributes.locX + 3*this.board.attributes.locY;
+    // console.log(this.board);
+    // var potentialMatchWinners = this.board.attributes.winningBoards[position];
+    // // for example: [ [[0,0], [0,1], [0,2]], [[0,1], [1,1], [2,1]] ]
+    //
+    // for (var i = 0; i < potentialMatchWinners.length; i++) {
+    //   winStatus = true;
+    //   for (var j = 0; j < 3; j++) {
+    //     var winningSequence = potentialMatchWinners[i];
+    //     var locX = winningSequence[j][0];
+    //     var locY = winningSequence[j][1];
+    //     // currentBoard[locX] example ['_', 'X', 'O']
+    //     if (currentBoard[locX][locY] != this.currentPlayer.mark) {
+    //       winStatus = false;
+    //     }
+    //   }
+    // } // first for-loop
+    // return winStatus;
   }
 
   //// SPACE FOR OTHER FUNCTIONS
