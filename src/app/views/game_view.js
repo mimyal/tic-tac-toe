@@ -25,15 +25,15 @@ var GameView = Backbone.View.extend({
     // console.log(this.stateOfBoard);
 
     // this.listenTo(this.model.board, 'board-tiles', this.assessMove);
-    this.listenTo(this.model.board, 'destroy', this.canyouhearme);
+    // this.listenTo(this.model.board, 'destroy', this.canyouhearme);
 
     this.listenTo(this.model, 'player-action', this.render);
 
-
+    this.listenTo(this.model.board, 'change', this.refreshBoard);
 
   },
-  canyouhearme: function() {
-    console.log('board destroyed');
+  refreshBoard: function() {
+    console.log('print the board again with the new values');
   },
 
   render: function() {
@@ -78,15 +78,25 @@ var GameView = Backbone.View.extend({
     } else if (this.model.status == 'draw') {
       // fancy draw popup
       window.alert("This game is a draw");
-      this.resetGame();
+      document.getElementByClassName('board-tiles').disabled = true;
+      // this.resetGame();
     } else if (this.model.status == 'win') {
       window.alert("This game is won by " + this.model.winner.name);
       this.model.winner.set({score: (this.model.winner.score+=1)});
-      this.resetGame();
+      document.getElementByClassName('board-tiles').disabled = true;
+
+      // this.resetGame();
     } else {
       console.log.error('What is the status of this game?');
     }
+    // debugger
+    this.stateOfBoard = this.model.board.attributes.tiles.reduce(function(a, b) { // finally making it an 1d array again
+      return a.concat(b);
+    }, []);;
+    // console.log("STATE OF BOARD" + this.stateOfBoard);
     this.showBoard();
+
+
   },
 
   assessMove0: function(){
